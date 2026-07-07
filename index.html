@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edge of Vision — Perception-Driven Technical Art</title>
-  <meta name="description" content="인간의 지각을 이해하는 렌더링. 주변시를 채우는 몰입과 착시가 만드는 현실감을 연구하는 테크니컬 아트 포트폴리오." />
+  <title>Edge of Vision — Technical Art</title>
+  <meta name="description" content="지각(perception)을 연구하는 테크니컬 아트 포트폴리오. 프로젝트와 공부 기록." />
 
-  <!-- Fonts: Unbounded(display) / Pretendard(body, KR) / IBM Plex Mono(utility) -->
+  <!-- Jost(기하학적 디스플레이) / Pretendard(본문) / IBM Plex Mono(유틸) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
   <link rel="stylesheet" href="css/style.css" />
@@ -18,154 +18,73 @@
 
   <!-- ===================== HERO ===================== -->
   <header class="hero" id="top">
-    <canvas id="fovea-canvas" aria-hidden="true"></canvas>
-    <div class="hero-fallback" aria-hidden="true"></div>
+    <canvas id="void-field" aria-hidden="true"></canvas>
 
     <nav class="nav">
-      <a class="nav-logo" href="#top">EoV<span class="nav-logo-dot">*</span></a>
+      <a class="nav-logo" href="#top">EoV</a>
       <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#works">Shader Study</a>
-        <a href="#roadmap">Roadmap</a>
-        <a href="#contact">Contact</a>
+        <a href="#projects">Projects</a>
+        <a href="#study">Study</a>
       </div>
     </nav>
 
     <div class="hero-inner">
-      <p class="hero-eyebrow">Perception-Driven Technical Art</p>
-      <h1 class="hero-title" data-text="EDGE OF&#10;VISION">EDGE OF<br>VISION</h1>
-      <p class="hero-sub">
-        인간의 지각을 이해하는 렌더링을 연구합니다.<br>
-        주변시(peripheral vision)를 채우는 몰입, 착시가 만드는 현실감.
-      </p>
-      <p class="hero-hint" id="hero-hint">
-        <span class="hint-dot"></span>커서를 움직여 보세요 — 초점(fovea) 주변에서만 디테일이 살아납니다
-      </p>
+      <!--
+        아나모픽 타이포그래피:
+        글자 조각들이 서로 다른 평면에 놓여 있고,
+        커서가 화면 정중앙에 올 때만 하나의 문장으로 정렬됩니다.
+        (참조: Felice Varini 스타일의 시점 의존적 설치 타이포)
+      -->
+      <h1 class="ana" id="ana" aria-label="EDGE OF VISION">
+        <span class="ana-line">
+          <span class="ana-frag" data-p="-42,10,-90,-24">ED</span><span class="ana-frag" data-p="30,-14,60,18">GE</span>
+          <span class="ana-frag ana-of" data-p="-18,26,-140,40">OF</span>
+        </span>
+        <span class="ana-line">
+          <span class="ana-frag" data-p="24,18,-70,-30">VI</span><span class="ana-frag" data-p="-34,-8,50,26">SI</span><span class="ana-frag" data-p="46,14,-110,-14">ON</span>
+        </span>
+      </h1>
+
+      <p class="hero-sub">지각을 렌더링하는 테크니컬 아트 — 몰입, 착시, 실시간 셰이더.</p>
+      <p class="hero-hint mono" id="hint">커서를 화면 정중앙으로 — 시점이 맞으면 글자가 정렬됩니다</p>
     </div>
 
-    <a class="hero-scroll" href="#about" aria-label="아래로 스크롤">
-      <span class="hero-scroll-line"></span>
-    </a>
+    <div class="hero-foot mono">
+      <span>PERCEPTION-DRIVEN&nbsp;TECHNICAL&nbsp;ART</span>
+      <span>INCHEON,&nbsp;KR</span>
+    </div>
   </header>
 
   <main>
-    <!-- ===================== ABOUT ===================== -->
-    <section class="section" id="about">
-      <div class="section-head">
-        <span class="section-label">About</span>
-        <h2 class="section-title">화면이 아니라, <em>시야</em>를 렌더링합니다</h2>
-      </div>
-
-      <div class="about-grid">
-        <div class="about-text">
-          <p>
-            안녕하세요. 테크니컬 아티스트를 준비하고 있는 <strong class="edit-me">홍길동</strong>입니다.
-            C++ 기반 OpenGL과 OpenCV를 공부하며 그래픽스 파이프라인과 영상 처리의 기초를 다졌고,
-            지금은 GLSL 셰이더를 중심으로 실시간 렌더링을 깊게 파고 있습니다.
-          </p>
-          <p>
-            제가 매혹된 질문은 하나입니다 — <strong>"사람은 언제 화면 속 세계를 '진짜'라고 느끼는가?"</strong>
-            라스베가스 Sphere처럼 주변시 전체를 덮는 몰입형 디스플레이, 그리고 뇌의 지각 원리를 역이용하는
-            착시 기반 렌더링이 그 답에 가장 가까이 있다고 믿습니다.
-          </p>
-          <p>
-            최종 목표는 포켓몬스터 게임 제작에 참여해, 플레이어가 화면을 '보는' 것이 아니라
-            그 세계 안에서 '모험하고 있다'고 느끼게 만드는 몰입 경험을 만드는 것입니다.
-          </p>
-        </div>
-
-        <ul class="about-keywords">
-          <li>
-            <span class="kw-num">시야 200°</span>
-            <h3>몰입형 렌더링</h3>
-            <p>주변시를 덮는 대화면·돔형 디스플레이 환경에서의 렌더링. 시야 가장자리의 지각 특성을 활용한 존재감(presence) 설계.</p>
-          </li>
-          <li>
-            <span class="kw-num">착시 錯視</span>
-            <h3>지각 기반 그래픽스</h3>
-            <p>주변시 드리프트, 색 항등성, 운동 잔효 같은 착시 원리를 셰이더로 재현·응용해 적은 비용으로 큰 현실감을 얻는 기법.</p>
-          </li>
-          <li>
-            <span class="kw-num">60 fps</span>
-            <h3>실시간 셰이더</h3>
-            <p>GLSL / HLSL 프로시저럴 셰이딩. 노이즈, SDF, 도메인 워핑을 이용한 물·불·디졸브 등 게임 이펙트 구현.</p>
-          </li>
-        </ul>
-      </div>
+    <!-- ===================== PROJECTS ===================== -->
+    <section class="section" id="projects">
+      <header class="sec-head">
+        <span class="sec-num" aria-hidden="true">01</span>
+        <h2 class="sec-title">프로젝트</h2>
+      </header>
+      <ol class="index-list" id="projects-list"></ol>
     </section>
 
-    <!-- ===================== WORKS ===================== -->
-    <section class="section section-works" id="works">
-      <div class="section-head">
-        <span class="section-label">Shader Study</span>
-        <h2 class="section-title">매주 하나씩, 지각을 실험합니다</h2>
-        <p class="section-desc">
-          The Book of Shaders와 ShaderToy를 기반으로 진행 중인 셰이더 스터디 기록입니다.
-          각 항목은 <span class="mono">결과 → 원리 → 트러블슈팅</span> 순으로 정리합니다.
-        </p>
-      </div>
-
-      <div class="works-grid" id="works-grid">
-        <!-- data/works.js 의 내용이 여기에 렌더링됩니다 -->
-      </div>
-    </section>
-
-    <!-- ===================== ROADMAP ===================== -->
-    <section class="section" id="roadmap">
-      <div class="section-head">
-        <span class="section-label">Roadmap</span>
-        <h2 class="section-title">언리얼 없이 쌓는 TA 핵심 역량</h2>
-        <p class="section-desc">저사양 환경(내장그래픽)에서도 가능한 순서로 설계한 학습 경로입니다. 순서 자체가 커리큘럼입니다.</p>
-      </div>
-
-      <ol class="roadmap">
-        <li class="roadmap-item is-current">
-          <span class="rm-stage">Stage 1 — 진행 중</span>
-          <h3>셰이더 기초</h3>
-          <p>Book of Shaders 완독, ShaderToy 주 1작. 노이즈 · SDF · 도메인 워핑. 툰 셰이딩, 디졸브, 물 셰이더 구현.</p>
-          <span class="rm-tags mono">GLSL · ShaderToy</span>
-        </li>
-        <li class="roadmap-item">
-          <span class="rm-stage">Stage 2 — 병행</span>
-          <h3>그래픽스 수학</h3>
-          <p>선형대수(변환 행렬, 쿼터니언), MVP 파이프라인. OpenCV에서 익힌 좌표 변환을 렌더링 관점으로 재정리.</p>
-          <span class="rm-tags mono">Linear Algebra</span>
-        </li>
-        <li class="roadmap-item">
-          <span class="rm-stage">Stage 3</span>
-          <h3>Blender + Python</h3>
-          <p>지오메트리 노드로 프로시저럴 제작, bpy API로 파이프라인 자동화 툴 개발. EEVEE 기반 저사양 워크플로.</p>
-          <span class="rm-tags mono">Geometry Nodes · bpy</span>
-        </li>
-        <li class="roadmap-item">
-          <span class="rm-stage">Stage 4</span>
-          <h3>Unity 통합</h3>
-          <p>Shader Graph로 GLSL 작업 이식, C# 커스텀 에디터 툴 제작. Blender 에셋 임포트로 파이프라인 전체 경험.</p>
-          <span class="rm-tags mono">URP · Shader Graph · C#</span>
-        </li>
-      </ol>
-    </section>
-
-    <!-- ===================== CONTACT ===================== -->
-    <section class="section section-contact" id="contact">
-      <div class="contact-inner">
-        <p class="contact-line">함께 만들고 싶은 세계가 있다면</p>
-        <h2 class="contact-title">시야의 가장자리에서 만나요</h2>
-        <div class="contact-links">
-          <a class="btn edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub ↗</a>
-          <a class="btn btn-ghost edit-me" href="mailto:your@email.com">Email</a>
-          <a class="btn btn-ghost edit-me" href="https://www.artstation.com/YOUR_ID" target="_blank" rel="noopener">ArtStation ↗</a>
-        </div>
-      </div>
+    <!-- ===================== STUDY ===================== -->
+    <section class="section" id="study">
+      <header class="sec-head">
+        <span class="sec-num" aria-hidden="true">02</span>
+        <h2 class="sec-title">공부한 내용</h2>
+      </header>
+      <ol class="index-list index-list-study" id="study-list"></ol>
     </section>
   </main>
 
   <footer class="footer">
-    <span class="mono">© 2026 Edge of Vision</span>
-    <span class="mono footer-note">이 페이지의 배경은 WebGL 프래그먼트 셰이더로 실시간 렌더링됩니다 — 포트폴리오 0번 작품.</span>
+    <p class="footer-line">시야의 가장자리에서.</p>
+    <div class="footer-links mono">
+      <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
+      <a class="edit-me" href="mailto:your@email.com">Email</a>
+    </div>
+    <span class="footer-copy mono">© 2026 Edge of Vision</span>
   </footer>
 
-  <script src="data/works.js"></script>
+  <script src="data/content.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

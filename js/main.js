@@ -1,203 +1,180 @@
 /* =====================================================
-   Edge of Vision — main.js
-   1) Fovea Shader: 히어로 배경 (WebGL 프래그먼트 셰이더)
-      커서 = 중심시(fovea). 커서 주변만 고주파 디테일이
-      살아나고, 주변시 영역은 흐릿하고 어둡게 —
-      인간 시각의 foveated rendering 개념을 그대로 재현.
-   2) Works Gallery: data/works.js 를 카드로 렌더링
+   Edge of Vision — main.js (모노크롬 리디자인)
+
+   1) Void Field  : 보이드 주위로 소용돌이치는 점묘 성야.
+                    한 번만 그리는 정적 캔버스 — GPU 부하 0.
+   2) Anamorphic  : 타이틀 조각들이 서로 다른 3D 평면에 흩어져
+                    있다가, 커서가 화면 정중앙(=올바른 시점)에
+                    올 때만 한 문장으로 정렬됩니다.
+   3) Index List  : data/content.js 를 목록으로 렌더링.
    ===================================================== */
 
-/* ---------- 1. Fovea Shader ---------- */
-(function heroShader() {
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduced) { document.body.classList.add("reduced-motion"); return; }
+/* ---------- 1. Void Field (정적, 1회 드로우) ---------- */
+(function voidField() {
+  const canvas = document.getElementById("void-field");
+  const ctx = canvas.getContext("2d");
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-  const canvas = document.getElementById("fovea-canvas");
-  const gl = canvas.getContext("webgl", { antialias: false, alpha: false });
-  if (!gl) { document.body.classList.add("no-webgl"); return; }
-
-  const VERT = `
-    attribute vec2 aPos;
-    void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
-  `;
-
-  const FRAG = `
-    precision highp float;
-    uniform vec2  u_res;
-    uniform float u_time;
-    uniform vec2  u_mouse; // 픽셀 좌표, 원점 좌하단
-
-    float hash(vec2 p) {
-      return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-    }
-    float noise(vec2 p) {
-      vec2 i = floor(p), f = fract(p);
-      f = f * f * (3.0 - 2.0 * f);
-      return mix(
-        mix(hash(i),                 hash(i + vec2(1.0, 0.0)), f.x),
-        mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0, 1.0)), f.x),
-        f.y
-      );
-    }
-    float fbm(vec2 p) {
-      float v = 0.0, a = 0.5;
-      for (int i = 0; i < 4; i++) {
-        v += a * noise(p);
-        p *= 2.03; a *= 0.5;
-      }
-      return v;
-    }
-
-    void main() {
-      vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
-      vec2 m  = (u_mouse       - 0.5 * u_res) / u_res.y;
-
-      // fovea: 커서에서 멀어질수록 0으로 감쇠
-      float d     = length(uv - m);
-      float focus = smoothstep(0.5, 0.0, d);
-
-      // 저주파 배경 흐름 (주변시 영역)
-      vec2  q = uv * 2.1;
-      float w = fbm(q + 0.12 * u_time);
-      float n = fbm(q + 1.7 * w + vec2(0.0, 0.06 * u_time));
-
-      // 고주파 디테일 — fovea 근처에서만 계산 가중
-      float detail = fbm(q * 4.5 + n * 3.0 + 0.1 * u_time) * focus;
-
-      float field = n * 0.85 + detail * 0.55;
-
-      vec3 base    = vec3(0.043, 0.035, 0.094); // --ink-deep
-      vec3 indigo  = vec3(0.24, 0.20, 0.56);
-      vec3 cyan    = vec3(0.35, 0.85, 0.95);
-      vec3 magenta = vec3(0.95, 0.35, 0.66);
-
-      vec3 col = mix(base, indigo, field);
-      col = mix(col, cyan,    smoothstep(0.55, 0.95, field) * (0.30 + 0.50 * focus));
-      col = mix(col, magenta, smoothstep(0.72, 1.05, field + 0.12 * focus) * 0.35);
-
-      // 주변시 감쇠: 화면 가장자리로 갈수록 어둡게 (지각의 비네트)
-      float vig = smoothstep(1.3, 0.35, length(uv));
-      col *= mix(0.5, 1.0, vig);
-
-      // fovea 은은한 글로우
-      col += cyan * 0.05 * focus;
-
-      gl_FragColor = vec4(col, 1.0);
-    }
-  `;
-
-  function compile(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-      console.error(gl.getShaderInfoLog(s));
-      return null;
-    }
-    return s;
-  }
-
-  const vs = compile(gl.VERTEX_SHADER, VERT);
-  const fs = compile(gl.FRAGMENT_SHADER, FRAG);
-  if (!vs || !fs) { document.body.classList.add("no-webgl"); return; }
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
-  gl.useProgram(prog);
-
-  // 풀스크린 삼각형
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, "aPos");
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-  const uRes   = gl.getUniformLocation(prog, "u_res");
-  const uTime  = gl.getUniformLocation(prog, "u_time");
-  const uMouse = gl.getUniformLocation(prog, "u_mouse");
-
-  // 내장그래픽 배려: DPR 상한 1.5
-  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-
-  function resize() {
+  function draw() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
-    canvas.width  = Math.round(w * DPR);
-    canvas.height = Math.round(h * DPR);
-    gl.viewport(0, 0, canvas.width, canvas.height);
+    canvas.width = w * DPR;
+    canvas.height = h * DPR;
+    ctx.scale(DPR, DPR);
+    ctx.clearRect(0, 0, w, h);
+
+    // 보이드 중심: 화면 위쪽 약간 오른편
+    const cx = w * 0.62, cy = h * 0.34;
+    const voidR = Math.min(w, h) * 0.10;
+
+    // 소용돌이 점묘: 보이드에 가까울수록 밀도·궤적 강화
+    const N = Math.min(2200, Math.round((w * h) / 900));
+    for (let i = 0; i < N; i++) {
+      const a = Math.random() * Math.PI * 2;
+      // 반경 분포: 보이드 바깥 고리에 몰리고 멀어질수록 희박
+      const r = voidR * (1.15 + Math.pow(Math.random(), 0.45) * 9);
+      // 소용돌이: 반경에 따라 각도를 비틀기
+      const swirl = a + (voidR * 14) / r;
+      const x = cx + Math.cos(swirl) * r;
+      const y = cy + Math.sin(swirl) * r * 0.72; // 살짝 눌린 원반
+
+      if (x < -4 || x > w + 4 || y < -4 || y > h + 4) continue;
+
+      const near = Math.max(0, 1 - (r - voidR) / (voidR * 6));
+      const alpha = 0.06 + near * 0.5 * Math.random();
+      const size = 0.4 + near * 0.9 * Math.random();
+
+      ctx.fillStyle = `rgba(234,234,234,${alpha.toFixed(3)})`;
+      // 보이드 근처는 점을 살짝 궤적(짧은 호)으로
+      if (near > 0.55 && Math.random() < 0.6) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(swirl + Math.PI / 2);
+        ctx.fillRect(-size * 2.2, -size / 2, size * 4.4, size);
+        ctx.restore();
+      } else {
+        ctx.fillRect(x, y, size, size);
+      }
+    }
+
+    // 보이드: 완전한 검정 원 + 흐릿한 경계광
+    const glow = ctx.createRadialGradient(cx, cy, voidR * 0.9, cx, cy, voidR * 2.6);
+    glow.addColorStop(0, "rgba(234,234,234,0.10)");
+    glow.addColorStop(1, "rgba(234,234,234,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(cx, cy, voidR * 2.6, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = "#060606";
+    ctx.beginPath(); ctx.arc(cx, cy, voidR, 0, Math.PI * 2); ctx.fill();
+
+    // 하단 비네트: 콘텐츠로 자연스럽게 잠기도록
+    const fade = ctx.createLinearGradient(0, h * 0.55, 0, h);
+    fade.addColorStop(0, "rgba(6,6,6,0)");
+    fade.addColorStop(1, "rgba(6,6,6,0.92)");
+    ctx.fillStyle = fade;
+    ctx.fillRect(0, 0, w, h);
   }
-  resize();
-  window.addEventListener("resize", resize);
 
-  // 마우스: 부드럽게 따라오는 fovea (lerp)
-  let target = { x: 0.5, y: 0.55 };
-  let cur    = { x: 0.5, y: 0.55 };
-  let interacted = false;
+  draw();
+  let t;
+  window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 200); });
+})();
 
-  window.addEventListener("pointermove", (e) => {
-    const r = canvas.getBoundingClientRect();
-    target.x = (e.clientX - r.left) / r.width;
-    target.y = 1.0 - (e.clientY - r.top) / r.height;
-    interacted = true;
-  }, { passive: true });
+/* ---------- 2. Anamorphic Title ---------- */
+(function anamorphic() {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ana = document.getElementById("ana");
+  const hint = document.getElementById("hint");
+  const frags = Array.from(document.querySelectorAll(".ana-frag"));
 
-  // 히어로가 화면 밖이면 렌더 정지 (배터리/발열 배려)
-  let visible = true;
-  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; })
-    .observe(canvas);
+  // data-p = "rotY, rotX, translateZ, translateX" (조각별 고유 평면)
+  const planes = frags.map((el) =>
+    el.dataset.p.split(",").map(Number)
+  );
+
+  if (reduced) {
+    document.body.classList.add("reduced-motion");
+    return; // 정렬된 상태로 정지
+  }
+
+  const fine = window.matchMedia("(pointer: fine)").matches;
+  let target = 1;   // 1 = 완전 분절, 0 = 정렬
+  let cur = 1;
+  let auto = !fine; // 터치 기기: 스스로 천천히 숨쉬듯 정렬↔분절
+  let alignedFlag = false;
+
+  if (fine) {
+    window.addEventListener("pointermove", (e) => {
+      const dx = e.clientX / window.innerWidth - 0.5;
+      const dy = e.clientY / window.innerHeight - 0.5;
+      // 중앙에서의 거리 → 분절 강도
+      target = Math.min(1, Math.hypot(dx, dy) * 3.2);
+    }, { passive: true });
+  }
 
   const t0 = performance.now();
   function frame(now) {
     requestAnimationFrame(frame);
-    if (!visible || document.hidden) return;
 
-    const t = (now - t0) / 1000;
-
-    // 상호작용 전에는 fovea가 스스로 천천히 배회
-    if (!interacted) {
-      target.x = 0.5 + 0.22 * Math.sin(t * 0.23);
-      target.y = 0.55 + 0.16 * Math.cos(t * 0.17);
+    if (auto) {
+      const t = (now - t0) / 1000;
+      target = 0.5 + 0.5 * Math.sin(t * 0.45); // 0~1 왕복
     }
-    cur.x += (target.x - cur.x) * 0.06;
-    cur.y += (target.y - cur.y) * 0.06;
 
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, t);
-    gl.uniform2f(uMouse, cur.x * canvas.width, cur.y * canvas.height);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    cur += (target - cur) * 0.08;
+    const f = cur;
+
+    for (let i = 0; i < frags.length; i++) {
+      const [ry, rx, tz, tx] = planes[i];
+      frags[i].style.transform =
+        `translateX(${tx * f}px) translateZ(${tz * f}px) ` +
+        `rotateY(${ry * f}deg) rotateX(${rx * f}deg)`;
+      frags[i].style.opacity = String(1 - f * 0.28);
+    }
+
+    const aligned = f < 0.1;
+    if (aligned !== alignedFlag) {
+      alignedFlag = aligned;
+      ana.classList.toggle("is-aligned", aligned);
+      hint.classList.toggle("is-aligned", aligned);
+      hint.textContent = aligned
+        ? "— 지금이 정면입니다"
+        : "커서를 화면 정중앙으로 — 시점이 맞으면 글자가 정렬됩니다";
+    }
   }
   requestAnimationFrame(frame);
 })();
 
-/* ---------- 2. Works Gallery ---------- */
-(function renderWorks() {
-  const grid = document.getElementById("works-grid");
-  if (!grid || typeof WORKS === "undefined") return;
-
+/* ---------- 3. Index Lists ---------- */
+(function renderLists() {
   const esc = (s) => String(s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;")
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-  grid.innerHTML = WORKS.map((w) => {
-    const media = w.media
-      ? (w.media.endsWith(".mp4")
-          ? `<video src="${esc(w.media)}" autoplay muted loop playsinline></video>`
-          : `<img src="${esc(w.media)}" alt="${esc(w.title)} 결과 미리보기" loading="lazy" />`)
-      : `<div class="work-media-empty">GIF coming soon</div>`;
+  // 제목을 두 조각으로 나눠 호버 시 분절 효과 부여
+  const splitTitle = (t) => {
+    const mid = Math.ceil(t.length / 2);
+    return `<span class="t1">${esc(t.slice(0, mid))}</span><span class="t2">${esc(t.slice(mid))}</span>`;
+  };
 
-    return `
-      <article class="work-card">
-        <div class="work-media">${media}</div>
-        <div class="work-body">
-          <span class="work-week">${esc(w.week)}</span>
-          <h3 class="work-title">${esc(w.title)}</h3>
-          <p class="work-oneliner">${esc(w.oneliner)}</p>
-          <p class="work-learned"><b>배운 점</b> — ${esc(w.learned)}</p>
-          <div class="work-tags">${w.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-          <a class="work-link" href="${esc(w.link)}" target="_blank" rel="noopener">코드 보기 ↗</a>
-        </div>
-      </article>`;
-  }).join("");
+  const row = (item, i) => {
+    const inner = `
+      <span class="row-idx mono">${String(i + 1).padStart(2, "0")}</span>
+      <h3 class="row-title">${splitTitle(item.title)}</h3>
+      <span class="row-meta">${esc(item.meta || "")}</span>
+      ${item.desc ? `<p class="row-desc">${esc(item.desc)}</p>` : ""}
+      ${item.tags && item.tags.length
+        ? `<div class="row-tags">${item.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>`
+        : ""}
+    `;
+    return item.link
+      ? `<li class="row"><a class="row-link" href="${esc(item.link)}" target="_blank" rel="noopener">${inner}</a></li>`
+      : `<li class="row">${inner}</li>`;
+  };
+
+  const pl = document.getElementById("projects-list");
+  const sl = document.getElementById("study-list");
+  if (pl && typeof PROJECTS !== "undefined")
+    pl.innerHTML = PROJECTS.map(row).join("");
+  if (sl && typeof STUDY !== "undefined")
+    sl.innerHTML = STUDY.map(row).join("");
 })();
