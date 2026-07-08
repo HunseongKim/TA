@@ -1,9 +1,9 @@
-# Edge of Vision — TA 포트폴리오 (새벽의 출발)
+# Edge of Vision — TA 포트폴리오 (맑은 날의 출발)
 
-주변시까지 덮는 몰입형 렌더링이라는 목표를 담은 포트폴리오.
-히어로는 "낯선 세계로 떠나기 직전의 새벽 들판" 씬입니다 —
-별이 남은 밤하늘, 지평선의 새벽빛, 들풀 실루엣과 그 사이의 길,
-떠다니는 반딧불. 마우스(시선)를 움직이면 하늘·노을·들판이
+밝고 희망찬 "모험 시작" 무드의 포트폴리오.
+히어로는 한여름 오전의 초록 골짜기 씬입니다 — 파란 하늘과
+뭉게구름, 굽이치며 내려오는 강, 언덕 위의 나무들, 햇빛 속을
+떠다니는 반짝임. 마우스(시선)를 움직이면 해·구름·언덕이
 서로 다른 깊이로 따라 움직여 '풍경 안에 서 있는' 감각을 줍니다.
 
 ## 폴더 구조
@@ -11,22 +11,18 @@
 ```
 portfolio/
 ├── index.html        # 페이지 골격 (링크 수정: edit-me 검색)
-├── css/style.css     # 밤하늘/새벽빛 팔레트
-├── js/main.js        # 별·들판·패럴랙스·반딧불·목록 렌더러
+├── css/style.css     # 하늘/초원 라이트 팔레트
+├── js/main.js        # 구름·골짜기·패럴랙스·반짝임·목록 렌더러
 ├── data/content.js   # ★ 평소엔 이 파일만 수정 (PROJECTS / STUDY)
 └── assets/works/     # 이미지·영상이 필요해지면 여기에
 ```
 
-## 배포 (GitHub Pages, 웹에서)
+## 배포 / 업데이트 (GitHub Pages)
 
-1. github.com → `+` → New repository (이름을 `아이디.github.io` 로 하면 주소가 깔끔)
-2. 저장소 첫 화면의 "uploading an existing file" 클릭
-   → 이 폴더 **안의 내용물**을 드래그해 업로드 → Commit changes
-3. Settings → Pages → Source `Deploy from a branch`, Branch `main` / `(root)` → Save
-4. 1~2분 뒤 발급된 주소로 접속
-
-이미 이전 버전을 올렸다면: Add file → Upload files 로 새 파일을 올리면
-같은 이름은 덮어써집니다.
+- 처음: 저장소 만들기 → "uploading an existing file"로 이 폴더 **안의
+  내용물** 업로드 → Settings → Pages → Branch `main` `(root)` → Save
+- 갱신: Add file → Upload files 로 새 파일을 올리면 같은 이름은 덮어써짐
+- 반영까지 1~3분. 안 바뀐 것 같으면 Ctrl+F5(강력 새로고침) 또는 시크릿 창 확인
 
 ## 내용 수정하는 법
 
@@ -36,7 +32,7 @@ portfolio/
 
 ## 성능/접근성
 
-- 별·들판은 1회만 그리는 정적 캔버스, 움직이는 건 반딧불 14개와
-  transform 패럴랙스뿐 — 내장그래픽에서 매우 가벼움
-- 터치 기기에서는 패럴랙스 비활성(배터리 배려), 반딧불만 유지
+- 구름·골짜기는 1회만 그리는 정적 캔버스. 움직이는 것은
+  반짝임 16개, 구름의 느린 CSS 드리프트, transform 패럴랙스뿐
+- 터치 기기에서는 패럴랙스 비활성(배터리 배려)
 - `prefers-reduced-motion` 설정 시 모든 움직임 정지

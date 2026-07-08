@@ -16,16 +16,16 @@
 <body>
 
   <!-- =====================================================
-       HERO — 새벽, 출발 직전의 언덕
-       사용자의 시선(마우스)에 따라 하늘·노을·들판이
-       서로 다른 깊이로 움직입니다. 화면이 아니라
-       '풍경 안에 서 있는' 감각을 주기 위한 패럴랙스.
+       HERO — 맑은 날, 모험이 시작되는 언덕
+       파란 하늘과 구름, 굽이치는 강이 있는 초록 골짜기.
+       마우스(시선)를 움직이면 하늘·구름·언덕이 서로 다른
+       깊이로 따라 움직입니다 — 풍경 '안에' 서 있는 감각.
        ===================================================== -->
   <header class="hero" id="top">
-    <div class="layer layer-sky"><canvas id="stars"></canvas></div>
-    <div class="layer layer-glow" aria-hidden="true"></div>
+    <div class="layer layer-sun" aria-hidden="true"></div>
+    <div class="layer layer-clouds"><div class="drift"><canvas id="clouds"></canvas></div></div>
     <div class="layer layer-land"><canvas id="land"></canvas></div>
-    <canvas id="sparks" aria-hidden="true"></canvas>
+    <canvas id="sparkles" aria-hidden="true"></canvas>
 
     <nav class="nav">
       <a class="nav-logo" href="#top">EDGE OF VISION</a>
