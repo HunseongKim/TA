@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edge of Vision — Technical Art</title>
-  <meta name="description" content="지각(perception)을 연구하는 테크니컬 아트 포트폴리오. 프로젝트와 공부 기록." />
+  <title>Edge of Vision — 시야를 가득 채우는 모험</title>
+  <meta name="description" content="주변시까지 덮는 몰입형 렌더링을 공부합니다. 언젠가 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다." />
 
-  <!-- Jost(기하학적 디스플레이) / Pretendard(본문) / IBM Plex Mono(유틸) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -16,47 +15,40 @@
 </head>
 <body>
 
-  <!-- ===================== HERO ===================== -->
+  <!-- =====================================================
+       HERO — 새벽, 출발 직전의 언덕
+       사용자의 시선(마우스)에 따라 하늘·노을·들판이
+       서로 다른 깊이로 움직입니다. 화면이 아니라
+       '풍경 안에 서 있는' 감각을 주기 위한 패럴랙스.
+       ===================================================== -->
   <header class="hero" id="top">
-    <canvas id="void-field" aria-hidden="true"></canvas>
+    <div class="layer layer-sky"><canvas id="stars"></canvas></div>
+    <div class="layer layer-glow" aria-hidden="true"></div>
+    <div class="layer layer-land"><canvas id="land"></canvas></div>
+    <canvas id="sparks" aria-hidden="true"></canvas>
 
     <nav class="nav">
-      <a class="nav-logo" href="#top">EoV</a>
-      <div class="nav-links">
-        <a href="#projects">Projects</a>
-        <a href="#study">Study</a>
+      <a class="nav-logo" href="#top">EDGE OF VISION</a>
+      <div class="nav-links mono">
+        <a href="#projects">프로젝트</a>
+        <a href="#study">공부</a>
       </div>
     </nav>
 
     <div class="hero-inner">
-      <!--
-        아나모픽 타이포그래피:
-        글자 조각들이 서로 다른 평면에 놓여 있고,
-        커서가 화면 정중앙에 올 때만 하나의 문장으로 정렬됩니다.
-        (참조: Felice Varini 스타일의 시점 의존적 설치 타이포)
-      -->
-      <h1 class="ana" id="ana" aria-label="EDGE OF VISION">
-        <span class="ana-line">
-          <span class="ana-frag" data-p="-42,10,-90,-24">ED</span><span class="ana-frag" data-p="30,-14,60,18">GE</span>
-          <span class="ana-frag ana-of" data-p="-18,26,-140,40">OF</span>
-        </span>
-        <span class="ana-line">
-          <span class="ana-frag" data-p="24,18,-70,-30">VI</span><span class="ana-frag" data-p="-34,-8,50,26">SI</span><span class="ana-frag" data-p="46,14,-110,-14">ON</span>
-        </span>
-      </h1>
-
-      <p class="hero-sub">지각을 렌더링하는 테크니컬 아트 — 몰입, 착시, 실시간 셰이더.</p>
-      <p class="hero-hint mono" id="hint">커서를 화면 정중앙으로 — 시점이 맞으면 글자가 정렬됩니다</p>
+      <h1 class="hero-title">시야를 가득 채우는<br /><em>모험</em>을 만듭니다</h1>
+      <p class="hero-sub">
+        라스베가스 스피어처럼 주변시까지 덮는 몰입감.<br class="br-wide" />
+        그 기술로 언젠가, 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다.
+      </p>
+      <p class="hero-hint mono" id="hint">마우스를 움직여 보세요 — 풍경이 시선을 따라옵니다</p>
     </div>
 
-    <div class="hero-foot mono">
-      <span>PERCEPTION-DRIVEN&nbsp;TECHNICAL&nbsp;ART</span>
-      <span>INCHEON,&nbsp;KR</span>
-    </div>
+    <a class="hero-scroll mono" href="#projects">아래로<span class="scroll-line"></span></a>
   </header>
 
   <main>
-    <!-- ===================== PROJECTS ===================== -->
+    <!-- ===================== 01 프로젝트 ===================== -->
     <section class="section" id="projects">
       <header class="sec-head">
         <span class="sec-num" aria-hidden="true">01</span>
@@ -65,7 +57,7 @@
       <ol class="index-list" id="projects-list"></ol>
     </section>
 
-    <!-- ===================== STUDY ===================== -->
+    <!-- ===================== 02 공부한 내용 ===================== -->
     <section class="section" id="study">
       <header class="sec-head">
         <span class="sec-num" aria-hidden="true">02</span>
@@ -76,7 +68,7 @@
   </main>
 
   <footer class="footer">
-    <p class="footer-line">시야의 가장자리에서.</p>
+    <p class="footer-line">같이 모험하실래요?</p>
     <div class="footer-links mono">
       <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
       <a class="edit-me" href="mailto:your@email.com">Email</a>
