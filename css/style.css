@@ -1,22 +1,21 @@
 /* =====================================================
-   미니멀 흑백 포트폴리오
-   흰 배경, 검은 글씨, 얇은 구분선. 그게 전부.
+   미니멀 + 블랙홀
+   검은 우주 배경 위 하나의 그림, 그리고 글.
    ===================================================== */
 :root {
-  --black: #111;
-  --gray:  #666;
-  --faint: #999;
-  --line:  #e5e5e5;
+  --bg:    #050505;
+  --white: #ececec;
+  --gray:  #9a9a9a;
+  --faint: #5c5c5c;
+  --line:  #1f1f1f;
+  --warm:  #f0c8a0;  /* 강착원반의 따뜻한 빛 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 72px 20px 60px;
-  background: #fff;
-  color: var(--black);
+  background: var(--bg);
+  color: var(--white);
   font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
   font-size: 15.5px;
   line-height: 1.8;
@@ -24,12 +23,32 @@ body {
 }
 
 a {
-  color: var(--black);
+  color: var(--white);
   text-underline-offset: 3px;
 }
-a:hover { color: var(--gray); }
+a:hover { color: var(--warm); }
 
-/* ---------- 머리 ---------- */
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- 히어로 ---------- */
+.hero { position: relative; }
+
+#hole {
+  display: block;
+  width: 100%;
+  height: min(72vh, 620px);
+}
+
+.head {
+  max-width: 640px;
+  margin: -40px auto 0;   /* 블랙홀 아래에 살짝 겹치게 */
+  padding: 0 20px;
+  position: relative;
+}
 .name {
   font-size: 22px;
   font-weight: 700;
@@ -47,13 +66,13 @@ a:hover { color: var(--gray); }
 }
 
 /* ---------- 섹션 ---------- */
-.section { margin-top: 64px; }
+.section { margin-top: 72px; }
 
 .section h2 {
   font-size: 15px;
   font-weight: 700;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--black);
+  border-bottom: 1px solid var(--white);
 }
 
 .list { list-style: none; }
@@ -90,7 +109,8 @@ a:hover { color: var(--gray); }
 
 /* ---------- 바닥 ---------- */
 .foot {
-  margin-top: 80px;
+  margin-top: 90px;
+  padding-bottom: 56px;
   font-size: 12.5px;
   color: var(--faint);
 }

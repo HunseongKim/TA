@@ -13,20 +13,24 @@
 </head>
 <body>
 
-  <header class="head">
-    <h1 class="name edit-me">홍길동</h1>
-    <p class="intro">
-      테크니컬 아티스트를 준비하고 있습니다.
-      실시간 셰이더와 몰입형 렌더링을 공부합니다.
-      언젠가 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다.
-    </p>
-    <p class="links">
-      <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
-      <a class="edit-me" href="mailto:your@email.com">Email</a>
-    </p>
+  <!-- 블랙홀: 1회만 그리는 정적 캔버스 -->
+  <header class="hero">
+    <canvas id="hole" aria-hidden="true"></canvas>
+    <div class="head">
+      <h1 class="name edit-me">홍길동</h1>
+      <p class="intro">
+        테크니컬 아티스트를 준비하고 있습니다.
+        실시간 셰이더와 몰입형 렌더링을 공부합니다.
+        언젠가 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다.
+      </p>
+      <p class="links">
+        <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
+        <a class="edit-me" href="mailto:your@email.com">Email</a>
+      </p>
+    </div>
   </header>
 
-  <main>
+  <main class="wrap">
     <section class="section" id="projects">
       <h2>프로젝트</h2>
       <ol class="list" id="projects-list"></ol>
@@ -38,7 +42,7 @@
     </section>
   </main>
 
-  <footer class="foot">© 2026</footer>
+  <footer class="foot wrap">© 2026</footer>
 
   <script src="data/content.js"></script>
   <script src="js/main.js"></script>
