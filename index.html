@@ -3,78 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edge of Vision — 시야를 가득 채우는 모험</title>
-  <meta name="description" content="주변시까지 덮는 몰입형 렌더링을 공부합니다. 언젠가 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다." />
+  <title>홍길동 — Technical Artist</title>
+  <meta name="description" content="테크니컬 아티스트를 준비하는 학생. 프로젝트와 공부 기록." />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- =====================================================
-       HERO — 맑은 날, 모험이 시작되는 언덕
-       파란 하늘과 구름, 굽이치는 강이 있는 초록 골짜기.
-       마우스(시선)를 움직이면 하늘·구름·언덕이 서로 다른
-       깊이로 따라 움직입니다 — 풍경 '안에' 서 있는 감각.
-       ===================================================== -->
-  <header class="hero" id="top">
-    <div class="layer layer-sun" aria-hidden="true"></div>
-    <div class="layer layer-clouds"><div class="drift"><canvas id="clouds"></canvas></div></div>
-    <div class="layer layer-land"><canvas id="land"></canvas></div>
-    <canvas id="sparkles" aria-hidden="true"></canvas>
-
-    <nav class="nav">
-      <a class="nav-logo" href="#top">EDGE OF VISION</a>
-      <div class="nav-links mono">
-        <a href="#projects">프로젝트</a>
-        <a href="#study">공부</a>
-      </div>
-    </nav>
-
-    <div class="hero-inner">
-      <h1 class="hero-title">시야를 가득 채우는<br /><em>모험</em>을 만듭니다</h1>
-      <p class="hero-sub">
-        라스베가스 스피어처럼 주변시까지 덮는 몰입감.<br class="br-wide" />
-        그 기술로 언젠가, 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다.
-      </p>
-      <p class="hero-hint mono" id="hint">마우스를 움직여 보세요 — 풍경이 시선을 따라옵니다</p>
-    </div>
-
-    <a class="hero-scroll mono" href="#projects">아래로<span class="scroll-line"></span></a>
+  <header class="head">
+    <h1 class="name edit-me">홍길동</h1>
+    <p class="intro">
+      테크니컬 아티스트를 준비하고 있습니다.
+      실시간 셰이더와 몰입형 렌더링을 공부합니다.
+      언젠가 포켓몬 세계를 진짜 모험처럼 만드는 것이 꿈입니다.
+    </p>
+    <p class="links">
+      <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
+      <a class="edit-me" href="mailto:your@email.com">Email</a>
+    </p>
   </header>
 
   <main>
-    <!-- ===================== 01 프로젝트 ===================== -->
     <section class="section" id="projects">
-      <header class="sec-head">
-        <span class="sec-num" aria-hidden="true">01</span>
-        <h2 class="sec-title">프로젝트</h2>
-      </header>
-      <ol class="index-list" id="projects-list"></ol>
+      <h2>프로젝트</h2>
+      <ol class="list" id="projects-list"></ol>
     </section>
 
-    <!-- ===================== 02 공부한 내용 ===================== -->
     <section class="section" id="study">
-      <header class="sec-head">
-        <span class="sec-num" aria-hidden="true">02</span>
-        <h2 class="sec-title">공부한 내용</h2>
-      </header>
-      <ol class="index-list index-list-study" id="study-list"></ol>
+      <h2>공부한 내용</h2>
+      <ol class="list" id="study-list"></ol>
     </section>
   </main>
 
-  <footer class="footer">
-    <p class="footer-line">같이 모험하실래요?</p>
-    <div class="footer-links mono">
-      <a class="edit-me" href="https://github.com/YOUR_GITHUB_ID" target="_blank" rel="noopener">GitHub</a>
-      <a class="edit-me" href="mailto:your@email.com">Email</a>
-    </div>
-    <span class="footer-copy mono">© 2026 Edge of Vision</span>
-  </footer>
+  <footer class="foot">© 2026</footer>
 
   <script src="data/content.js"></script>
   <script src="js/main.js"></script>
